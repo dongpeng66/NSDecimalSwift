@@ -113,6 +113,35 @@ class ViewController: UIViewController {
             print("v17 = \(v17)")
         }
         
+        let v18 = "Nd".nn_toStringByDefault("0")
+            .nn_add("1.3333333333")
+        if NN_isNaN(v18) {
+            print("v18 ==== NaN")
+        } else {
+            print("v18 = \(v18)")
+        }
+        
+        let v19 = "Nd".nn_toStringByDefault("0")
+            .nn_add("1.3333333333")
+        if NN_isNaN(v19) {
+            print("v19 ==== NaN")
+        } else {
+            print("v19 = \(v19)")
+        }
+        
+        var v20 = "Nd".nn_toStringByDefault_behavior("0.11111111111", NNDecimalNumberDefaultBehavior2())
+        
+        if NN_isNaN(v20) {
+            print("v20 ==== NaN")
+        } else {
+            print("v20 = \(v20)")
+        }
+        v20 = v20.nn_add("1.3333333333")
+        if NN_isNaN(v20) {
+            print("v20 ==== NaN")
+        } else {
+            print("v20 = \(v20)")
+        }
     }
 
 

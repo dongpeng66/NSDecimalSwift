@@ -27,6 +27,10 @@ protocol NNDecimalNumber {
     var nn_toString_behavior: (_ behavior: (any NSDecimalNumberBehaviors)?) -> String { get }
     
     var nn_toDefaultString: (Any?) -> String { get }
+    
+    
+    var nn_toStringByDefault: (Any?) -> String { get }
+    var nn_toStringByDefault_behavior: (Any?, _ behavior: (any NSDecimalNumberBehaviors)?) -> String { get }
 }
 
 protocol NNDecimalNumberCompare {
@@ -41,6 +45,27 @@ protocol NNDecimalNumberCompare {
 
 
 extension String: NNDecimalNumber, NNDecimalNumberCompare {
+    // MARK: - 直接转String同时给一个默认值,防止丢失精度,防止出现Nan
+    var nn_toStringByDefault: (Any?) -> String {
+        return { value in
+            let currentString = nn_convertString(self)
+            if !self.isEmpty, !NN_isNaN(currentString) {
+                return self.nn_toString() as String
+            }
+            return nn_convertString(value) as String
+        }
+    }
+    // MARK: - 直接转String同时给一个默认值,防止丢失精度,防止出现Nan,第二个参数是DecimalNumberDefaultBehavior
+    var nn_toStringByDefault_behavior: (Any?, (any NSDecimalNumberBehaviors)?) -> String {
+        return { value, behavior in
+            let currentString = nn_convertString(self)
+            if !self.isEmpty, !NN_isNaN(currentString) {
+                return self.nn_toString_behavior(behavior) as String
+            }
+            return nn_convertString(value) as String
+        }
+    }
+    
     // MARK: - 直接转String给一个默认值防止出现Nan
     var nn_toDefaultString: (Any?) -> String {
         return { value in
@@ -58,7 +83,7 @@ extension String: NNDecimalNumber, NNDecimalNumberCompare {
             return nn_calculate(.add, self, "0") as String
         }
     }
-    // MARK: - 直接转String防止丢失精度，第二个参数是DecimalNumberDefaultBehavior
+    // MARK: - 直接转String防止丢失精度,第二个参数是DecimalNumberDefaultBehavior
     var nn_toString_behavior: ((any NSDecimalNumberBehaviors)?) -> String {
         return { behavior  in
             return nn_calculate_behavior(.add, self, "0", behavior) as String
@@ -101,37 +126,37 @@ extension String: NNDecimalNumber, NNDecimalNumberCompare {
             return nn_calculate(.mulPowerOf10, self, value) as String
         }
     }
-    // MARK: - 数学运算,加,可添加behavior,第一个参数是string，第二个参数是DecimalNumberDefaultBehavior
+    // MARK: - 数学运算,加,可添加behavior,第一个参数是string,第二个参数是DecimalNumberDefaultBehavior
     var nn_add_behavior: (Any?, _ behavior: (any NSDecimalNumberBehaviors)?) -> String {
         return { value,behavior  in
             return nn_calculate_behavior(.add, self, value, behavior) as String
         }
     }
-    // MARK: - 数学运算,减,可添加behavior,第一个参数是string，第二个参数是DecimalNumberDefaultBehavior
+    // MARK: - 数学运算,减,可添加behavior,第一个参数是string,第二个参数是DecimalNumberDefaultBehavior
     var nn_sub_behavior: (Any?, _ behavior: (any NSDecimalNumberBehaviors)?) -> String {
         return { value, behavior in
             return nn_calculate_behavior(.sub, self, value, behavior) as String
         }
     }
-    // MARK: - 数学运算,乘,可添加behavior,第一个参数是string，第二个参数是DecimalNumberDefaultBehavior
+    // MARK: - 数学运算,乘,可添加behavior,第一个参数是string,第二个参数是DecimalNumberDefaultBehavior
     var nn_mul_behavior: (Any?, _ behavior: (any NSDecimalNumberBehaviors)?) -> String {
         return { value, behavior in
             return nn_calculate_behavior(.mul, self, value, behavior) as String
         }
     }
-    // MARK: - 数学运算,除,可添加behavior,第一个参数是string，第二个参数是DecimalNumberDefaultBehavior
+    // MARK: - 数学运算,除,可添加behavior,第一个参数是string,第二个参数是DecimalNumberDefaultBehavior
     var nn_div_behavior: (Any?, _ behavior: (any NSDecimalNumberBehaviors)?) -> String {
         return { value, behavior in
             return nn_calculate_behavior(.div, self, value, behavior) as String
         }
     }
-    // MARK: - 数学运算,幂等比如："3".nn_power_behavior("3",behavior)=3*3*3=27,可添加behavior,第一个参数是string，第二个参数是DecimalNumberDefaultBehavior
+    // MARK: - 数学运算,幂等比如："3".nn_power_behavior("3",behavior)=3*3*3=27,可添加behavior,第一个参数是string,第二个参数是DecimalNumberDefaultBehavior
     var nn_power_behavior: (Any?, _ behavior: (any NSDecimalNumberBehaviors)?) -> String {
         return { value, behavior in
             return nn_calculate_behavior(.power, self, value, behavior) as String
         }
     }
-    // MARK: - 数学运算,乘以10的幂意味着将数字乘以10的一次方、二次方、三次方等。比如："5".nn_mulPowerOf10("4")=5*(10*10*10*10)=50000,可添加behavior,第一个参数是string，第二个参数是DecimalNumberDefaultBehavior
+    // MARK: - 数学运算,乘以10的幂意味着将数字乘以10的一次方、二次方、三次方等。比如："5".nn_mulPowerOf10("4")=5*(10*10*10*10)=50000,可添加behavior,第一个参数是string,第二个参数是DecimalNumberDefaultBehavior
     var nn_mulPowerOf10_behavior: (Any?, _ behavior: (any NSDecimalNumberBehaviors)?) -> String {
         return { value, behavior in
             return nn_calculate_behavior(.mulPowerOf10, self, value, behavior) as String
@@ -143,24 +168,24 @@ extension String: NNDecimalNumber, NNDecimalNumberCompare {
         let r = nn_decimalNumberWithValue(value)
         return l.compare(r)
     }
-    // MARK: - 比较运算，等于
+    // MARK: - 比较运算,等于
     func nn_decimalIsEqualTo(_ value: Any?) -> Bool {
         return nn_decimalCompare(value) == .orderedSame
     }
-    // MARK: - 比较运算，大于
+    // MARK: - 比较运算,大于
     func nn_decimalIsGreaterThan(_ value: Any?) -> Bool {
         return nn_decimalCompare(value) == .orderedDescending
     }
-    // MARK: - 比较运算，小于
+    // MARK: - 比较运算,小于
     func nn_decimalIsLessThan(_ value: Any?) -> Bool {
         return nn_decimalCompare(value) == .orderedAscending
     }
-    // MARK: - 比较运算，大于等于
+    // MARK: - 比较运算,大于等于
     func nn_decimalIsGreaterThanOrEqualTo(_ value: Any) -> Bool {
         let result = nn_decimalCompare(value)
         return result == .orderedDescending || result == .orderedSame
     }
-    // MARK: - 比较运算，小于等于
+    // MARK: - 比较运算,小于等于
     func nn_decimalIsLessThanOrEqualTo(_ value: Any?) -> Bool {
         let result = nn_decimalCompare(value)
         return result == .orderedAscending || result == .orderedSame
