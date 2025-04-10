@@ -89,6 +89,9 @@ class ViewController: UIViewController {
         let v13 = "4.991".nn_toString()
         print("v13 = \(v13)")
         
+        let v131 = "4.9999".nn_toString()
+        print("v131 = \(v131)")
+        
         let v14 = "4.9999999".nn_toString_behavior(NNDecimalNumberDefaultBehavior2())
         print("v14 = \(v14)")
         
