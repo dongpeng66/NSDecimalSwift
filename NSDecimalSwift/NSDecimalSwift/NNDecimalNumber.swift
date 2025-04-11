@@ -62,7 +62,7 @@ extension String: NNDecimalNumber, NNDecimalNumberCompare {
             if !self.isEmpty, !NN_isNaN(currentString) {
                 return self.nn_toString_behavior(behavior) as String
             }
-            return nn_convertString(value) as String
+            return nn_convertString(value).nn_toString_behavior(behavior) as String
         }
     }
     

@@ -11,6 +11,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        let numTen = NNDecimalNumberDefaultBehavior()
+        numTen.roundingModeItem = .plain
+        numTen.scaleNum = 8
 
         let v1 = "3.23".nn_sub("2")
             .nn_add("5")
@@ -74,10 +78,10 @@ class ViewController: UIViewController {
             .nn_div("3.33")
         print("v9 = \(v9)")
         
-        let v10 = "3".nn_add_behavior("2", NNDecimalNumberDefaultBehavior2())
-            .nn_mul_behavior("3.882", NNDecimalNumberDefaultBehavior2())
-            .nn_mul_behavior("10".nn_mul_behavior("2.11", NNDecimalNumberDefaultBehavior2()), NNDecimalNumberDefaultBehavior2())
-            .nn_div_behavior("3.33", NNDecimalNumberDefaultBehavior2())
+        let v10 = "3".nn_add_behavior("2", numTen)
+            .nn_mul_behavior("3.882", numTen)
+            .nn_mul_behavior("10".nn_mul_behavior("2.11", numTen),numTen)
+            .nn_div_behavior("3.33", numTen)
         print("v10 = \(v10)")
         
         let v11 = "3".nn_power("3")
@@ -92,12 +96,12 @@ class ViewController: UIViewController {
         let v131 = "4.9999".nn_toString()
         print("v131 = \(v131)")
         
-        let v14 = "4.9999999".nn_toString_behavior(NNDecimalNumberDefaultBehavior2())
+        let v14 = "4.9999999".nn_toString_behavior(numTen)
         print("v14 = \(v14)")
         
         let v15 = "4.999999999".nn_toString()
             .nn_add("1.3333333333")
-            .nn_add_behavior("1.2222222222222222222222 ", NNDecimalNumberDefaultBehavior2())
+            .nn_add_behavior("1.2222222222222222222222 ", numTen)
         print("v15 = \(v15)")
         
         let v16 = "".nn_toString()
@@ -132,7 +136,7 @@ class ViewController: UIViewController {
             print("v19 = \(v19)")
         }
         
-        var v20 = "Nd".nn_toStringByDefault_behavior("0.11111111111", NNDecimalNumberDefaultBehavior2())
+        var v20 = "Nd".nn_toStringByDefault_behavior("0.11111111111", numTen)
         
         if NN_isNaN(v20) {
             print("v20 ==== NaN")

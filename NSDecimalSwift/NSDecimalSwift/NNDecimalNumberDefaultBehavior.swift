@@ -10,8 +10,12 @@ import Foundation
 class NNDecimalNumberDefaultBehavior: NSObject, NSDecimalNumberBehaviors {
     // MARK: - NSDecimalNumberBehaviors Protocol
     
+    var roundingModeItem:RoundingMode = .plain
+    
+    var scaleNum:Int16 = 2
+    
     func roundingMode() -> NSDecimalNumber.RoundingMode {
-        return .plain
+        return NSDecimalNumber.RoundingMode(rawValue: roundingModeItem.rawValue) ?? .plain
     }
     /**
      
@@ -25,7 +29,7 @@ class NNDecimalNumberDefaultBehavior: NSObject, NSDecimalNumberBehaviors {
      使用NSDecimalNumberHandler来控制小数点位数。例如，如果你希望所有的计算都保留两位小数，你可以这样设置：
      */
     func scale() -> Int16 {
-        return 2
+        return scaleNum
     }
     
     func exceptionDuringOperation(_ operation: Selector,
@@ -33,5 +37,19 @@ class NNDecimalNumberDefaultBehavior: NSObject, NSDecimalNumberBehaviors {
                                 leftOperand: NSDecimalNumber,
                                 rightOperand: NSDecimalNumber?) -> NSDecimalNumber? {
         return NSDecimalNumber.notANumber
+    }
+}
+extension NNDecimalNumberDefaultBehavior {
+
+    /***************    Type definitions        ***********/
+    public enum RoundingMode : UInt, @unchecked Sendable {
+
+        case plain = 0
+
+        case down = 1
+
+        case up = 2
+
+        case bankers = 3
     }
 }
