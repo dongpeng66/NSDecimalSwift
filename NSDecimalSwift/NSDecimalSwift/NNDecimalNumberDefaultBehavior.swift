@@ -9,9 +9,9 @@ import Foundation
 
 class NNDecimalNumberDefaultBehavior: NSObject, NSDecimalNumberBehaviors {
     // MARK: - NSDecimalNumberBehaviors Protocol
-    
+    //默认是四舍五入
     var roundingModeItem:RoundingMode = .plain
-    
+    //默认保留2位小数
     var scaleNum:Int16 = 2
     
     func roundingMode() -> NSDecimalNumber.RoundingMode {
