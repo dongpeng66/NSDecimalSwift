@@ -49,8 +49,8 @@ extension String: NNDecimalNumber, NNDecimalNumberCompare {
     var nn_toStringByDefault: (Any?) -> String {
         return { value in
             let currentString = nn_convertString(self)
-            if !self.isEmpty, !NN_isNaN(currentString) {
-                return self.nn_toString() as String
+            if !currentString.isEmpty, !NN_isNaN(currentString) {
+                return currentString.nn_toString() as String
             }
             return nn_convertString(value) as String
         }
@@ -59,8 +59,8 @@ extension String: NNDecimalNumber, NNDecimalNumberCompare {
     var nn_toStringByDefault_behavior: (Any?, (any NSDecimalNumberBehaviors)?) -> String {
         return { value, behavior in
             let currentString = nn_convertString(self)
-            if !self.isEmpty, !NN_isNaN(currentString) {
-                return self.nn_toString_behavior(behavior) as String
+            if !currentString.isEmpty, !NN_isNaN(currentString) {
+                return currentString.nn_toString_behavior(behavior) as String
             }
             return nn_convertString(value).nn_toString_behavior(behavior) as String
         }
@@ -70,8 +70,8 @@ extension String: NNDecimalNumber, NNDecimalNumberCompare {
     var nn_toDefaultString: (Any?) -> String {
         return { value in
             let currentString = nn_convertString(self)
-            if !self.isEmpty, !NN_isNaN(currentString) {
-                return self as String
+            if !currentString.isEmpty, !NN_isNaN(currentString) {
+                return currentString as String
             }
             return nn_convertString(value) as String
         }
